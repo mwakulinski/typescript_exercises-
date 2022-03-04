@@ -1,10 +1,6 @@
 "use strict";
 const paginateArray = (dataEntries, settings) => {
-    throwIfNotInt(settings.actualPageIdx);
-    throwIfNotInt(settings.entriesOnPage);
-    throwIfNotPositive(settings.actualPageIdx);
-    throwIfNotPositive(settings.entriesOnPage);
-    throwIfNoEntriesOnPage(dataEntries, settings);
+    validateInput(dataEntries, settings);
     return dataEntries.filter((entry, index) => {
         if (isDataOnPage(index, settings)) {
             return entry;
@@ -17,6 +13,13 @@ const isDataOnPage = (dataIndex, settings) => {
             settings.entriesOnPage * settings.actualPageIdx +
                 settings.entriesOnPage -
                 1);
+};
+const validateInput = (dataEntries, settings) => {
+    throwIfNotInt(settings.actualPageIdx);
+    throwIfNotInt(settings.entriesOnPage);
+    throwIfNotPositive(settings.actualPageIdx);
+    throwIfNotPositive(settings.entriesOnPage);
+    throwIfNoEntriesOnPage(dataEntries, settings);
 };
 const throwIfNotInt = (number) => {
     if (!Number.isInteger(number)) {

@@ -1,9 +1,5 @@
 const paginateArray = <T>(dataEntries: T[], settings: Setting): T[] => {
-  throwIfNotInt(settings.actualPageIdx);
-  throwIfNotInt(settings.entriesOnPage);
-  throwIfNotPositive(settings.actualPageIdx);
-  throwIfNotPositive(settings.entriesOnPage);
-  throwIfNoEntriesOnPage(dataEntries, settings);
+  validateInput(dataEntries, settings);
   return dataEntries.filter((entry, index) => {
     if (isDataOnPage(index, settings)) {
       return entry;
@@ -19,6 +15,14 @@ const isDataOnPage = (dataIndex: number, settings: Setting): boolean => {
         settings.entriesOnPage -
         1
   );
+};
+
+const validateInput = <T>(dataEntries: T[], settings: Setting) => {
+  throwIfNotInt(settings.actualPageIdx);
+  throwIfNotInt(settings.entriesOnPage);
+  throwIfNotPositive(settings.actualPageIdx);
+  throwIfNotPositive(settings.entriesOnPage);
+  throwIfNoEntriesOnPage(dataEntries, settings);
 };
 
 const throwIfNotInt = (number: number): void => {
