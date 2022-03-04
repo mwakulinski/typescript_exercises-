@@ -1,7 +1,4 @@
-const paginateArray = (
-  dataEntries: any[],
-  settings: settingsInterface
-): any[] => {
+const paginateArray = <T>(dataEntries: T[], settings: Setting): T[] => {
   throwIfNotInt(settings.actualPageIdx);
   throwIfNotInt(settings.entriesOnPage);
   throwIfNotPositive(settings.actualPageIdx);
@@ -14,10 +11,7 @@ const paginateArray = (
   });
 };
 
-const isDataOnPage = (
-  dataIndex: number,
-  settings: settingsInterface
-): boolean => {
+const isDataOnPage = (dataIndex: number, settings: Setting): boolean => {
   return (
     dataIndex >= settings.entriesOnPage * settings.actualPageIdx &&
     dataIndex <=
@@ -39,10 +33,7 @@ const throwIfNotPositive = (number: number): void => {
   }
 };
 
-const throwIfNoEntriesOnPage = (
-  array: any[],
-  settings: settingsInterface
-): void => {
+const throwIfNoEntriesOnPage = <T>(array: T[], settings: Setting): void => {
   const lastIndexOfArr: number = array.length - 1;
   const firstIndexOfDisplayedData: number =
     settings.entriesOnPage * settings.actualPageIdx;
@@ -52,10 +43,10 @@ const throwIfNoEntriesOnPage = (
   }
 };
 
-interface settingsInterface {
+type Setting = {
   actualPageIdx: number;
   entriesOnPage: number;
-}
+};
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 const settings = { actualPageIdx: 1, entriesOnPage: 8 };
