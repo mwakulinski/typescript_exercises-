@@ -2,7 +2,7 @@ const alphabet = "abcdefghijklmnoprstuwxyz".split("");
 const min = 4;
 const max = 7;
 
-const aggregateIntoChunks = (array: any[]): any[][] => {
+const aggregateIntoChunks = <T>(array: T[]) => {
   const chunksLengthArr: number[] = generateChunksLength(array);
   const properChunksLengthArr: number[] = modifyChunksLengthIfNeeded(
     array,
@@ -10,15 +10,15 @@ const aggregateIntoChunks = (array: any[]): any[][] => {
   );
 
   let sum = 0;
-  return properChunksLengthArr.map((chunkLenth: number): any[] => {
-    const chunk: any[] = array.slice(sum, sum + chunkLenth);
+  return properChunksLengthArr.map((chunkLenth: number): T[] => {
+    const chunk: T[] = array.slice(sum, sum + chunkLenth);
     sum += chunkLenth;
     return chunk;
   });
 };
 
-const modifyChunksLengthIfNeeded = (
-  mainArr: any[],
+const modifyChunksLengthIfNeeded = <T>(
+  mainArr: T[],
   chunksArray: number[]
 ): number[] => {
   const chunksLengthSum: number = chunksArray.reduce((total, current) => {
@@ -47,7 +47,7 @@ const modifyChunksLengthIfNeeded = (
   return chunksArray;
 };
 
-const generateChunksLength = (array: any[]): number[] => {
+const generateChunksLength = <T>(array: T[]): number[] => {
   let sum = 0;
   const chunksLengthArr: number[] = [];
 
