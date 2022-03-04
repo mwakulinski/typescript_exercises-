@@ -1,34 +1,33 @@
-const forEachFn = (
-  array: any[],
-  callback: callbackInterfaceOneParm<any>
-): void => {
+const numArray: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const forEachFn = <T>(array: T[], callback: (data: T) => void): void => {
   for (let i = 0; i < array.length; i++) {
     callback(array[i]);
   }
 };
 
-const mapFn = (
-  array: any[],
-  callback: callbackInterfaceThreeParams<any, number, any[], any>
-): any[] => {
-  const mapedArr: unknown[] = [];
+const mapFn = <T, K>(
+  array: T[],
+  callback: (data: T, index?: number, array?: T[]) => K
+) => {
+  const mapedArr: K[] = [];
   for (let i = 0; i < array.length; i++) {
-    mapedArr.push(callback(array[i], i, array));
+    mapedArr.push(callback(array[i], i));
   }
   return mapedArr;
 };
 
-function* entriesFn(array: any[]) {
+function* entriesFn<T>(array: T[]) {
   for (let i = 0; i < array.length; i++) {
     yield [i];
   }
 }
 
-const filterFn = (
-  array: any[],
-  callback: callbackInterfaceThreeParams<any, number, any[], any>
-): any[] => {
-  const filteredArr: any[] = [];
+const filterFn = <T>(
+  array: T[],
+  callback: (data: T, index?: number, array?: T[]) => boolean
+): T[] => {
+  const filteredArr: T[] = [];
   for (let i = 0; i < array.length; i++) {
     if (callback(array[i], i, array)) {
       filteredArr.push(array[i]);
@@ -37,33 +36,30 @@ const filterFn = (
   return filteredArr;
 };
 
-const reduceFn = (
-  array: any[],
-  callback: callbackInterfaceFourParams<any, any, number, any[], any>,
-  inital?: any
-): any | any[] => {
-  let total: any;
+const reduceFn = <T>(
+  array: T[],
+  callback: (accumulator: T, current: T, index: number, array: T[]) => T,
+  inital?: T
+): T => {
+  let accumulator: T;
   let start: number;
 
   if (inital) {
-    total = inital;
+    accumulator = inital;
     start = 0;
   } else {
-    total = array[0];
+    accumulator = array[0];
     start = 1;
   }
 
   for (let i = start; i < array.length; i++) {
-    total = callback(total, array[i], i, array);
+    accumulator = callback(accumulator, array[i], i, array);
   }
 
-  return total;
+  return accumulator;
 };
 
-const everyFn = (
-  array: any[],
-  callback: callbackInterfaceOneParm<any, boolean>
-): boolean => {
+const everyFn = <T>(array: T[], callback: (data: T) => boolean): boolean => {
   for (let i = 0; array.length; i++) {
     if (!callback(array[i])) {
       return false;
@@ -72,10 +68,7 @@ const everyFn = (
   return true;
 };
 
-const someFn = (
-  array: any[],
-  callback: callbackInterfaceOneParm<any, boolean>
-): boolean => {
+const someFn = <T>(array: T[], callback: (data: T) => boolean): boolean => {
   for (let i = 0; array.length; i++) {
     if (callback(array[i])) {
       return true;
@@ -84,45 +77,11 @@ const someFn = (
   return false;
 };
 
-const numArray: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-interface callbackInterfaceOneParm<typeOne, typeTwo = void> {
-  (param: typeOne): typeTwo;
-}
-
-interface callbackInterfaceThreeParams<
-  typeOne,
-  typeTwo = void,
-  typeThree = void,
-  typeFour = void
-> {
-  (param1: typeOne, param2: typeTwo, param3: typeThree): typeFour;
-}
-
-interface callbackInterfaceFourParams<
-  typeOne,
-  typeTwo,
-  typeThree = void,
-  typeFour = void,
-  typeFive = void
-> {
-  (
-    param1: typeOne,
-    param2: typeTwo,
-    param3: typeThree,
-    param4: typeFour
-  ): typeFive;
-}
-
 const logData = (data: any): void => {
   console.log(data);
 };
 
-const multiplyByIndex = (
-  number: number,
-  index: number,
-  array: number[]
-): number => {
+const multiplyByIndex = (number: number, index: number) => {
   return number * index;
 };
 

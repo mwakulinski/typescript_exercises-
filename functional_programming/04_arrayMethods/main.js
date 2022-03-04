@@ -1,4 +1,4 @@
-"use strict";
+const numArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const forEachFn = (array, callback) => {
     for (let i = 0; i < array.length; i++) {
         callback(array[i]);
@@ -7,7 +7,7 @@ const forEachFn = (array, callback) => {
 const mapFn = (array, callback) => {
     const mapedArr = [];
     for (let i = 0; i < array.length; i++) {
-        mapedArr.push(callback(array[i], i, array));
+        mapedArr.push(callback(array[i], i));
     }
     return mapedArr;
 };
@@ -26,20 +26,20 @@ const filterFn = (array, callback) => {
     return filteredArr;
 };
 const reduceFn = (array, callback, inital) => {
-    let total;
+    let accumulator;
     let start;
     if (inital) {
-        total = inital;
+        accumulator = inital;
         start = 0;
     }
     else {
-        total = array[0];
+        accumulator = array[0];
         start = 1;
     }
     for (let i = start; i < array.length; i++) {
-        total = callback(total, array[i], i, array);
+        accumulator = callback(accumulator, array[i], i, array);
     }
-    return total;
+    return accumulator;
 };
 const everyFn = (array, callback) => {
     for (let i = 0; array.length; i++) {
@@ -57,11 +57,10 @@ const someFn = (array, callback) => {
     }
     return false;
 };
-const numArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const logData = (data) => {
     console.log(data);
 };
-const multiplyByIndex = (number, index, array) => {
+const multiplyByIndex = (number, index) => {
     return number * index;
 };
 const isEven = (num) => num % 2 === 0;
