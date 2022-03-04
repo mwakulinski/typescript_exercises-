@@ -27,7 +27,11 @@ const modifyChunksLengthIfNeeded = <T>(
   }, 0);
 
   if (isChunksSumLongerThanArrLength(chunksLengthSum, mainArr.length)) {
-    chunksArray[chunksArray.length - 1] -= chunksLengthSum - mainArr.length;
+    chunksArray[chunksArray.length - 1] = shortenLastChunk(
+      chunksArray,
+      chunksLengthSum,
+      mainArr.length
+    );
   }
 
   if (
@@ -52,6 +56,14 @@ const isChunksSumLongerThanArrLength = (
   arrLength: number
 ) => {
   return chunksSum > arrLength;
+};
+
+const shortenLastChunk = (
+  chunksArray: number[],
+  chunkLengthSum: number,
+  mainArrLenth: number
+) => {
+  return chunksArray[chunksArray.length - 1] - (chunkLengthSum - mainArrLenth);
 };
 
 const generateChunksLength = <T>(array: T[]): number[] => {
