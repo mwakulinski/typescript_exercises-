@@ -6,6 +6,8 @@ import { data } from "./data";
 type Data = typeof data;
 
 const filterWith = <T>(array: T[], phraseToFind: string) => {
+  if (phraseToFind.length < 3) return [];
+
   return array.filter((seekData) => {
     return checkIfHavePhrase(seekData, phraseToFind);
   });
@@ -23,4 +25,6 @@ const checkIfHavePhrase = <T, K>(obj: T, phraseToFind: string): K | boolean => {
 };
 
 const output = filterWith(data, "male");
+const output2 = filterWith(data, "ma");
 console.log(output);
+console.log(output2);
