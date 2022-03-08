@@ -9,9 +9,13 @@ const aggregateIntoChunks = <T>(array: T[]) => {
     chunksLengthArr
   );
 
+  return gerateChunks(array, properChunksLengthArr);
+};
+
+const gerateChunks = <T>(mainArr: T[], chunkLengthArr: number[]) => {
   let sum = 0;
-  return properChunksLengthArr.map((chunkLenth: number): T[] => {
-    const chunk: T[] = array.slice(sum, sum + chunkLenth);
+  return chunkLengthArr.map((chunkLenth: number): T[] => {
+    const chunk: T[] = mainArr.slice(sum, sum + chunkLenth);
     sum += chunkLenth;
     return chunk;
   });
@@ -21,31 +25,22 @@ const modifyChunksLengthIfNeeded = <T>(
   mainArr: T[],
   chunksArray: number[]
 ): number[] => {
-  const chunksLengthSum: number = chunksArray.reduce((total, current) => {
-    total += current;
-    return total;
-  }, 0);
+  const chunksLengthSum: number = sumArrElem(chunksArray);
 
   if (isChunksSumLongerThanArrLength(chunksLengthSum, mainArr.length)) {
-    chunksArray[chunksArray.length - 1] = shortenLastChunk(
-      chunksArray,
-      chunksLengthSum,
-      mainArr.length
-    );
+    shortenLastChunk(chunksArray, chunksLengthSum, mainArr.length);
   }
 
-  if (
-    chunksArray[chunksArray.length - 1] + chunksArray[chunksArray.length - 2] <=
-    7
-  ) {
-    chunksArray[chunksArray.length - 2] =
-      chunksArray[chunksArray.length - 1] + chunksArray[chunksArray.length - 2];
-    chunksArray.pop();
+  const lastChunk: number = chunksArray[chunksArray.length - 1];
+  const secondToLastChunk: number = chunksArray[chunksArray.length - 2];
+
+  if (isLastTwoChunksSumSmallerEqualMax(lastChunk, secondToLastChunk)) {
+    setProperLastChunkLength(chunksArray);
+    return chunksArray;
   }
 
-  while (chunksArray[chunksArray.length - 1] < 4) {
-    chunksArray[chunksArray.length - 1] += 1;
-    chunksArray[chunksArray.length - 2] -= 1;
+  while (chunksArray[chunksArray.length - 1] < min) {
+    setProperLastTwoChunksLength(chunksArray);
   }
 
   return chunksArray;
@@ -63,7 +58,21 @@ const shortenLastChunk = (
   chunkLengthSum: number,
   mainArrLenth: number
 ) => {
-  return chunksArray[chunksArray.length - 1] - (chunkLengthSum - mainArrLenth);
+  chunksArray[chunksArray.length - 1] -= chunkLengthSum - mainArrLenth;
+};
+
+const isLastTwoChunksSumSmallerEqualMax = (chunk1: number, chunk2: number) => {
+  return chunk1 + chunk2 <= max;
+};
+
+const setProperLastChunkLength = (chunksArray: number[]) => {
+  chunksArray[chunksArray.length - 2] += chunksArray[chunksArray.length - 1];
+  chunksArray.pop();
+};
+
+const setProperLastTwoChunksLength = (chunksArray: number[]) => {
+  chunksArray[chunksArray.length - 1] += 1;
+  chunksArray[chunksArray.length - 2] -= 1;
 };
 
 const generateChunksLength = <T>(array: T[]): number[] => {
@@ -82,7 +91,11 @@ const generateRandomNum = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
+const sumArrElem = (array: number[]) => {
+  return array.reduce((accumulator: number, current: number) => {
+    return (accumulator += current);
+  }, 0);
+};
+
 const chunks = aggregateIntoChunks(alphabet);
 console.log(chunks);
-// chunks:
-// [[a,b,c,d,e,f],[g,h,i,j,k],[l,m,n,o,p,r,s],[t,u,w,x,y,z]]
