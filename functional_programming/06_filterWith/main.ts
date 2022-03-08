@@ -9,22 +9,32 @@ const filterWith = <T>(array: T[], phraseToFind: string) => {
   if (phraseToFind.length < 3) return [];
 
   return array.filter((seekData) => {
-    return checkIfHavePhrase(seekData, phraseToFind);
+    return checkIfObjectHavePhrase(seekData, phraseToFind);
   });
 };
 
-const checkIfHavePhrase = <T, K>(obj: T, phraseToFind: string): K | boolean => {
-  const regExpToCheck: RegExp = new RegExp(`^${phraseToFind}.*`, "gi");
+const checkIfObjectHavePhrase = <T, K>(
+  obj: T,
+  phraseToFind: string
+): K | boolean => {
   const objValues = Object.values(obj);
   return objValues.some((value) => {
     if (typeof value === "object") {
-      return checkIfHavePhrase(value, phraseToFind);
+      return checkIfObjectHavePhrase(value, phraseToFind);
     }
-    return regExpToCheck.test(value);
+    return testIfValueHavePhrase(value, phraseToFind);
   });
 };
 
+const testIfValueHavePhrase = (
+  dataToCheck: string | number,
+  phraseToFind: string
+) => {
+  const regExpToCheck: RegExp = new RegExp(`^${phraseToFind}.*`, "gi");
+  return regExpToCheck.test(dataToCheck.toString());
+};
+
 const output = filterWith(data, "male");
-const output2 = filterWith(data, "ma");
+const output2 = filterWith(data, "Sheppard");
 console.log(output);
 console.log(output2);
