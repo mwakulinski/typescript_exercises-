@@ -5,8 +5,22 @@
 import { data } from "./data";
 type Data = typeof data;
 
-const filterWith = (array: Data[], phraseToFind: string) => {
+const filterWith = <T>(array: T[], phraseToFind: string) => {
   return array.filter((seekData) => {
-    return chckIfHavePhrase(seekData, phraseToFind);
+    return checkIfHavePhrase(seekData, phraseToFind);
   });
 };
+
+const checkIfHavePhrase = <T, K>(obj: T, phraseToFind: string): K | boolean => {
+  const regExpToCheck: RegExp = new RegExp(`^${phraseToFind}.*`, "gi");
+  const objValues = Object.values(obj);
+  return objValues.some((value) => {
+    if (typeof value === "object") {
+      return checkIfHavePhrase(value, phraseToFind);
+    }
+    return regExpToCheck.test(value);
+  });
+};
+
+const output = filterWith(data, "male");
+console.log(output);
