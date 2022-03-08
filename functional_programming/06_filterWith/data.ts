@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     _id: "5e985a07feddae7617ac44f6",
     age: 24,
