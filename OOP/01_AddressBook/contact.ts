@@ -48,8 +48,3 @@ export class Contact implements IContact {
     return regExpToCheck.test(contactValuesString);
   }
 }
-
-const contact1 = new Contact("Michał", "Wakuliński", "michał.wakulinski@op.pl");
-contact1.modifyData("name", "Bartek");
-console.log(contact1.checkIfHavaPhrase("fghfg"));
-console.log(contact1);
