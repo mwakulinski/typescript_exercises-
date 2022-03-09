@@ -12,7 +12,7 @@ interface IContact {
   surname: string;
   email: string;
   creationDate: Date;
-  uuid: string;
+  id: string;
   modificationDate?: Date;
   modifyData: (key: modificableDataKeys, value: valueTypes) => void;
   checkIfHavaPhrase: (phrase: string) => boolean;
@@ -20,7 +20,7 @@ interface IContact {
 
 export class Contact implements IContact {
   readonly creationDate: Date = new Date();
-  readonly uuid: string = uuidv4();
+  readonly id: string = uuidv4();
   public modificationDate?: Date;
 
   constructor(
