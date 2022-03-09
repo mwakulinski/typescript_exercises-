@@ -12,7 +12,7 @@ interface IGroup {
   changeName: (newName: string) => void;
   addContact: (contact: Contact) => void;
   deleteContact: (contactId: string) => void;
-  checkIfCintactExists: (phrase: string) => boolean;
+  checkIfContactExists: (phrase: string) => boolean;
 }
 
 export class Group implements IGroup {
@@ -32,13 +32,13 @@ export class Group implements IGroup {
   }
 
   deleteContact(contactId: string) {
-    if (!this.checkIfCintactExists(contactId)) {
+    if (!this.checkIfContactExists(contactId)) {
       throw new Error("Such a contact does not exist in this group");
     }
     this.contactsList = this.contactsList.filter(({ id }) => id !== contactId);
   }
 
-  checkIfCintactExists(phrase: string) {
+  checkIfContactExists(phrase: string) {
     return this.contactsList.some((contact) =>
       contact.checkIfHavaPhrase(phrase)
     );
