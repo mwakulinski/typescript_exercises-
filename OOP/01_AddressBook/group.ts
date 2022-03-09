@@ -10,7 +10,7 @@ interface IGroup {
   contactsList: Contact[];
   id: string;
   changeName: (newName: string) => void;
-  addContact: (name: string, surname: string, email: string) => void;
+  addContact: (contact: Contact) => void;
   deleteContact: (contactId: string) => void;
   checkIfCintactExists: (phrase: string) => boolean;
 }
@@ -27,8 +27,8 @@ export class Group implements IGroup {
     this.name = newName;
   }
 
-  addContact(name: string, surname: string, email: string) {
-    this.contactsList.push(new Contact(name, surname, email));
+  addContact(contact: Contact) {
+    this.contactsList.push(contact);
   }
 
   deleteContact(contactId: string) {
