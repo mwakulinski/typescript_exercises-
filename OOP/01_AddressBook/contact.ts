@@ -4,7 +4,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Validator } from "./validator";
 
-type modificableDataKeys = "name" | "surname" | "email";
+export type modificableContracKeys = "name" | "surname" | "email";
 type valueTypes = string;
 
 interface IContact {
@@ -14,7 +14,7 @@ interface IContact {
   creationDate: Date;
   id: string;
   modificationDate?: Date;
-  modifyData: (key: modificableDataKeys, value: valueTypes) => void;
+  modifyData: (key: modificableContracKeys, value: valueTypes) => void;
   checkIfHavaPhrase: (phrase: string) => boolean;
 }
 
@@ -33,7 +33,7 @@ export class Contact implements IContact {
     Validator.throwIfEmptyString(email);
   }
 
-  modifyData(key: modificableDataKeys, value: string) {
+  modifyData(key: modificableContracKeys, value: string) {
     Validator.throwIfEmptyString(key);
     Validator.throwIfEmptyString(value);
     this[key] = value;
