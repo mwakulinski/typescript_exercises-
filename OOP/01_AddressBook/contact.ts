@@ -18,7 +18,7 @@ interface IContact {
   checkIfHavaPhrase: (phrase: string) => boolean;
 }
 
-class Contact implements IContact {
+export class Contact implements IContact {
   readonly creationDate: Date = new Date();
   readonly uuid: string = uuidv4();
   public modificationDate?: Date;
