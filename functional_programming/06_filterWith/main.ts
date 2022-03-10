@@ -3,7 +3,6 @@
 // - a powyżej 2 ma filtrować po każdej wartości typu string lub number w obiekcie
 
 import { data } from "./data";
-type Data = typeof data;
 
 const filterWith = <T>(array: T[], phraseToFind: string) => {
   if (phraseToFind.length < 3) return [];
@@ -13,10 +12,7 @@ const filterWith = <T>(array: T[], phraseToFind: string) => {
   });
 };
 
-const checkIfObjectHavePhrase = <T, K>(
-  obj: T,
-  phraseToFind: string
-): K | boolean => {
+const checkIfObjectHavePhrase = <T>(obj: T, phraseToFind: string): boolean => {
   const objValues = Object.values(obj);
   return objValues.some((value) => {
     if (typeof value === "object") {
