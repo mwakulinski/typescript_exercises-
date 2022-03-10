@@ -1,28 +1,25 @@
 const paginateArray = <T>(dataEntries: T[], settings: Setting): T[] => {
   validateInput(dataEntries, settings);
-  return dataEntries.filter((entry, index) => {
-    if (isDataOnPage(index, settings)) {
-      return entry;
-    }
-  });
+  return dataEntries.filter((entry, index) => isDataOnPage(index, settings));
 };
 
-const isDataOnPage = (dataIndex: number, settings: Setting): boolean => {
+const isDataOnPage = (
+  dataIndex: number,
+  { entriesOnPage, actualPageIdx }: Setting
+): boolean => {
   return (
-    dataIndex >= settings.entriesOnPage * settings.actualPageIdx &&
-    dataIndex <=
-      settings.entriesOnPage * settings.actualPageIdx +
-        settings.entriesOnPage -
-        1
+    dataIndex >= entriesOnPage * actualPageIdx &&
+    dataIndex <= entriesOnPage * actualPageIdx + entriesOnPage - 1
   );
 };
 
-const validateInput = <T>(dataEntries: T[], settings: Setting) => {
-  throwIfNotInt(settings.actualPageIdx);
-  throwIfNotInt(settings.entriesOnPage);
-  throwIfNotPositive(settings.actualPageIdx);
-  throwIfNotPositive(settings.entriesOnPage);
-  throwIfNoEntriesOnPage(dataEntries, settings);
+const validateInput = <T>(
+  dataEntries: T[],
+  { entriesOnPage, actualPageIdx }: Setting
+) => {
+  throwIfNotPositive(actualPageIdx);
+  throwIfNotPositive(entriesOnPage);
+  throwIfNoEntriesOnPage(dataEntries, { entriesOnPage, actualPageIdx });
 };
 
 const throwIfNotInt = (number: number): void => {
@@ -37,10 +34,12 @@ const throwIfNotPositive = (number: number): void => {
   }
 };
 
-const throwIfNoEntriesOnPage = <T>(array: T[], settings: Setting): void => {
-  const lastIndexOfArr: number = array.length - 1;
-  const firstIndexOfDisplayedData: number =
-    settings.entriesOnPage * settings.actualPageIdx;
+const throwIfNoEntriesOnPage = <T>(
+  array: T[],
+  { entriesOnPage, actualPageIdx }: Setting
+): void => {
+  const lastIndexOfArr = array.length - 1;
+  const firstIndexOfDisplayedData = entriesOnPage * actualPageIdx;
 
   if (firstIndexOfDisplayedData > lastIndexOfArr) {
     throw new Error("No data to display");
