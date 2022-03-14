@@ -4,19 +4,10 @@
 import { Contact } from "./contact";
 import { v4 as uuidv4 } from "uuid";
 import { Validator } from "./validator";
+import { ContactsList } from "./contact-list";
 
-interface IGroup {
-  name: string;
-  contactsList: Contact[];
-  id: string;
-  changeName: (newName: string) => void;
-  addContact: (contact: Contact) => void;
-  deleteContact: (contactId: string) => void;
-  checkIfContactExists: (phrase: string) => boolean;
-}
-
-export class Group implements IGroup {
-  public contactsList: Contact[] = [];
+export class Group {
+  public contactsList: ContactsList = new ContactsList();
   readonly id: string = uuidv4();
   constructor(public name: string) {
     Validator.throwIfEmptyString(name);
@@ -28,19 +19,22 @@ export class Group implements IGroup {
   }
 
   addContact(contact: Contact) {
-    this.contactsList.push(contact);
+    this.contactsList.addContact(contact);
   }
 
   deleteContact(contactId: string) {
-    if (!this.checkIfContactExists(contactId)) {
-      throw new Error("Such a contact does not exist in this group");
-    }
-    this.contactsList = this.contactsList.filter(({ id }) => id !== contactId);
+    this.contactsList.deleteContact(contactId);
   }
 
-  checkIfContactExists(phrase: string) {
-    return this.contactsList.some((contact) =>
-      contact.checkIfHavaPhrase(phrase)
-    );
+  checkIfContactExists(contactId: string) {
+    return this.contactsList.checkIfContactExists(contactId);
+  }
+
+  checkIfHavaPhrase(phrase: string) {
+    Validator.throwIfEmptyString(phrase);
+    const contactValuesArr = Object.values(this);
+    const contactValuesString = contactValuesArr.join(" ");
+    const regExpToCheck = new RegExp(`${phrase}.*`, `gi`);
+    return regExpToCheck.test(contactValuesString);
   }
 }
