@@ -5,20 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 import { Validator } from "./validator";
 
 export type modificableContracKeys = "name" | "surname" | "email";
-type valueTypes = string;
 
-interface IContact {
-  name: string;
-  surname: string;
-  email: string;
-  creationDate: Date;
-  id: string;
-  modificationDate?: Date;
-  modifyData: (key: modificableContracKeys, value: valueTypes) => void;
-  checkIfHavaPhrase: (phrase: string) => boolean;
-}
-
-export class Contact implements IContact {
+/*klasa domenowa*/
+export class Contact {
   readonly creationDate: Date = new Date();
   readonly id: string = uuidv4();
   public modificationDate?: Date;
@@ -48,3 +37,40 @@ export class Contact implements IContact {
     return regExpToCheck.test(contactValuesString);
   }
 }
+
+// Dependency inversion principle
+// class StockMarket {
+//     constructor(requester: IMarketsRequester) {
+
+//     }
+//   }
+
+//   interface IMarketsRequester {
+//     getCurrentStocks(): void;
+//   }
+
+//   class MarketsHttpRequester implements IMarketsRequester {
+//     public getCurrentStocks() {
+//       /*magic trics*/
+//     }
+//   }
+
+//   class MarketsGrpcRequester implements IMarketsRequester {
+//     public getCurrentStocks() {
+//       /*magic trics*/
+//     }
+//   }
+
+//   class TestRequester implements IMarketsRequester {
+//      public getCurrentStocks() {
+//       return ...;
+//     }
+//   }
+
+//   class HttpModule {
+//     public makeHttpRequest() {
+//       /*magic trics*/
+//     }
+
+//     public makeGrpcRequest() {}
+//   }
