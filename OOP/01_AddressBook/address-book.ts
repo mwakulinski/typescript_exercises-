@@ -1,14 +1,14 @@
 // Ma mieć: listę wszystkich kontaktów, listę grup kontaktów
 // Ma umożliwiać: szukanie kontaktu po frazie, dodawanie/usuwanie/modyfikacje nowych kontaktów, dodawanie/usuwanie/modyfikacje nowych grup
 
-import { v4 as uuidv4 } from "uuid";
 import { Contact, modificableContracKeys } from "./contact";
+import { ContactsList } from "./contact-list";
 import { Group } from "./group";
-import { Validator } from "./validator";
+import { GroupsList } from "./group-list";
 
 interface IAddressBook {
-  contactsList: Contact[];
-  groupsList: Group[];
+  contactsList: ContactsList;
+  groupsList: GroupsList;
   addNewContact: (name: string, surname: string, email: string) => void;
   deleteContact: (contactId: string) => void;
   modifyContact: (
@@ -26,65 +26,48 @@ interface IAddressBook {
 }
 
 export class AddressBook implements IAddressBook {
-  contactsList: Contact[] = [];
-  groupsList: Group[] = [];
+  //private
+  contactsList: ContactsList = new ContactsList();
+  groupsList: GroupsList = new GroupsList();
 
   addNewContact(name: string, surname: string, email: string) {
-    this.contactsList.push(new Contact(name, surname, email));
+    this.contactsList.addNewContact(name, surname, email);
   }
 
   deleteContact(contactId: string) {
-    if (!this.findContact(contactId)) {
-      throw new Error("Such a contact doesn't exist in this AddressBook");
-    }
-
-    this.contactsList = this.contactsList.filter(({ id }) => id !== contactId); // czy nie powinniśmy zrobić osobnej klasy dla contactsList?
-    this.groupsList.forEach((group) => group.deleteContact(contactId)); // zawołać tutaj deleteContactFromFroup
+    this.contactsList.deleteContact(contactId);
+    this.groupsList.deleteContactFromGroups(contactId);
   }
 
   modifyContact(contactId: string, key: modificableContracKeys, value: string) {
-    const contactToModify = this.findContact(contactId);
-    if (!contactToModify) {
-      throw new Error("Such a contact doesn't exist in this AddressBook");
-    }
-    contactToModify.modifyData(key, value);
+    this.contactsList.modifyContact(contactId, key, value);
   }
 
   addGroup(name: string) {
-    if (this.findGroup(name)) {
-      throw new Error("Such a group already exists");
-    }
-    this.groupsList.push(new Group(name));
+    this.groupsList.addGroup(name);
   }
 
   deleteGroup(groupName: string) {
-    if (!this.findGroup(groupName)) {
-      throw new Error("Such a group doesn't exist in this AddressBook");
-    }
-    this.groupsList.filter(({ name }) => name === groupName);
+    this.groupsList.deleteGroup(groupName);
   }
 
   modifyGroup(groupName: string, value: string) {
-    const groupToModify = this.findGroup(groupName);
-    if (!groupToModify) {
-      throw new Error("Such a group doesn't exist in this AddressBook");
-    }
-    groupToModify.changeName(value);
+    this.groupsList.modifyGroup(groupName, value);
   }
 
   addContactToGroup(groupName: string, contact: Contact) {
-    const groupToAddContact = this.findGroup(groupName);
+    const groupToAddContact = this.groupsList.findGroup(groupName);
     if (!groupToAddContact) {
       throw new Error("Such a group doesn't exist in this AddressBook");
     }
     if (groupToAddContact.checkIfContactExists(contact.id)) {
       throw new Error("Such a contact already is in this group");
     }
-    this.contactsList.push(contact);
+    groupToAddContact.addContact(contact);
   }
 
   deleteContactFromGroup(groupName: string, contactId: string) {
-    const groupToAddContact = this.findGroup(groupName);
+    const groupToAddContact = this.groupsList.findGroup(groupName);
     if (!groupToAddContact) {
       throw new Error("Such a group doesn't exist in this AddressBook");
     }
@@ -95,15 +78,10 @@ export class AddressBook implements IAddressBook {
   }
 
   findGroup(groupName: string) {
-    return this.groupsList.find(
-      ({ name }) => name.toLowerCase() === groupName.toLowerCase()
-    );
+    return this.groupsList.findGroup(groupName);
   }
 
-  findContact(phrase: string) {
-    Validator.throwIfEmptyString(phrase);
-    return this.contactsList.find((contact) =>
-      contact.checkIfHavaPhrase(phrase)
-    );
+  findContact(constactId: string) {
+    return this.contactsList.findContact(constactId);
   }
 }
