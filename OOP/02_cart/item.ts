@@ -20,10 +20,3 @@ export class Item {
     this.category.push(newCategory);
   }
 }
-
-// Ma miec: Nazwę, Kategorię, Cenę, Rabat % na przedmiot, uuid
-// Ma umożliwiać:
-// - modyfikować cenę przedmiotu
-// - określać jego rabat procentowy
-// - dodawać produkt do kategorii
-// - zmianę nazwy, ceny lub rabatu
